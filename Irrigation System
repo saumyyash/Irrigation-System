@@ -1,0 +1,136 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Crop {
+    String name;
+    double waterRequirement; // Liters per day
+
+    public Crop(String name, double waterRequirement) {
+        this.name = name;
+        this.waterRequirement = waterRequirement;
+    }
+
+    @Override
+    public String toString() {
+        return "Crop: " + name + ", Water Requirement: " + waterRequirement + " L/day";
+    }
+}
+
+class IrrigationSchedule {
+    String cropName;
+    String time; // Format: HH:MM
+
+    public IrrigationSchedule(String cropName, String time) {
+        this.cropName = cropName;
+        this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        return "Irrigation for " + cropName + " at " + time;
+    }
+}
+
+public class IrrigationSystem {
+    private static ArrayList<Crop> crops = new ArrayList<>();
+    private static ArrayList<IrrigationSchedule> schedules = new ArrayList<>();
+    private static double totalWaterUsage = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n=== Irrigation Information System ===");
+            System.out.println("1. Add Crop");
+            System.out.println("2. View Crops");
+            System.out.println("3. Add Irrigation Schedule");
+            System.out.println("4. View Schedules");
+            System.out.println("5. Record Water Usage");
+            System.out.println("6. View Total Water Usage");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    addCrop(scanner);
+                    break;
+                case 2:
+                    viewCrops();
+                    break;
+                case 3:
+                    addSchedule(scanner);
+                    break;
+                case 4:
+                    viewSchedules();
+                    break;
+                case 5:
+                    recordWaterUsage(scanner);
+                    break;
+                case 6:
+                    viewWaterUsage();
+                    break;
+                case 0:
+                    System.out.println("Exiting system. Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 0);
+
+        scanner.close();
+    }
+
+    private static void addCrop(Scanner scanner) {
+        System.out.print("Enter crop name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter water requirement (L/day): ");
+        double waterRequirement = scanner.nextDouble();
+        crops.add(new Crop(name, waterRequirement));
+        System.out.println("Crop added successfully.");
+    }
+
+    private static void viewCrops() {
+        if (crops.isEmpty()) {
+            System.out.println("No crops added.");
+        } else {
+            System.out.println("=== Crops ===");
+            for (Crop crop : crops) {
+                System.out.println(crop);
+            }
+        }
+    }
+
+    private static void addSchedule(Scanner scanner) {
+        System.out.print("Enter crop name: ");
+        String cropName = scanner.nextLine();
+        System.out.print("Enter irrigation time (HH:MM): ");
+        String time = scanner.nextLine();
+        schedules.add(new IrrigationSchedule(cropName, time));
+        System.out.println("Irrigation schedule added successfully.");
+    }
+
+    private static void viewSchedules() {
+        if (schedules.isEmpty()) {
+            System.out.println("No irrigation schedules added.");
+        } else {
+            System.out.println("=== Irrigation Schedules ===");
+            for (IrrigationSchedule schedule : schedules) {
+                System.out.println(schedule);
+            }
+        }
+    }
+
+    private static void recordWaterUsage(Scanner scanner) {
+        System.out.print("Enter water usage (liters): ");
+        double usage = scanner.nextDouble();
+        totalWaterUsage += usage;
+        System.out.println("Water usage recorded successfully.");
+    }
+
+    private static void viewWaterUsage() {
+        System.out.println("Total Water Usage: " + totalWaterUsage + " liters");
+    }
+}
